@@ -1,0 +1,105 @@
+
+## write a for loop to 
+### compute the mean of every column in mtcars
+```{r for loop to calculate the mean}
+mtcars_mean<- vector("double", ncol(mtcars))
+for(i in seq_along(mtcars)){
+  mtcars_mean[[i]]<- mean(mtcars[[i]], na.rm = TRUE)
+}
+mtcars_mean
+```
+
+### determines the type of each collumn in nycflights13::flights
+```{r determine the type of each column}
+library(nycflights13)
+col_type<- vector("list",ncol(flights))
+for(i in seq_along(flights)){
+  col_type[[i]]<- class(flights[[i]])
+}
+col_type
+
+```
+
+### computes the unique value in each column of iris
+```{r number of unique values loop}
+unique_val<- vector("list",ncol(iris))
+for(i in seq_along(iris)){
+  unique_val[[i]]<- unique(iris[[i]])
+}
+unique_val
+```
+
+### generate 10 random normal for each of mu=-10, 0, 10, and 100
+
+```{r loop to generate mean for random normal}
+n<- 10
+mu<- c(-10,0,10,100)
+sd<- 1
+rnorm_mean<- vector("list", length= length(mu))
+for(i in seq_along(mu)){
+  rnorm_mean[[i]]<- rnorm(n=n, mean= mu[[i]], sd=sd)
+}
+rnorm_mean
+```
+
+## a directory is full of csv files that must be read in. 
+their path is in a vector called files<- dir("data/", pattern= "\\.csv$, full.names= TRUE).
+Write a for loop that load them into a single data frame.
+```{r loop to load .csv files into a single dataframe}
+files<- dir("data/", pattern = "\\.csv$", full.names = TRUE)
+files.df <- data.frame()
+for(i in seq_along(files)){
+  files.df[[i]]<- read.csv(files[[i]])
+}
+files.df
+```
+
+## function that print the mean of each numeric column in a data frame along with its name
+```{r function to print mean of numeric variables and name}
+
+show_mean <- function(data){
+  col_mean<- vector("double",length(data))
+  col_name<- colnames(data)
+  for(i in seq_along(data)){
+    if(is.double(data[[i]])){
+      col_mean[i]<-mean(data[[i]])
+      
+    }else {
+      col_mean[i]<- paste(NA,":", col_name[i], "is not a double vector column")
+      
+    }
+  }
+  paste0(col_name,":",
+         col_mean)
+}
+
+# show mean for iris data
+show_mean(iris)
+```
+### adapting col_summary() function so thata it can only apply to numeric columns
+```{r column summary}
+col_summary<- function(df, fun){
+  out<- vector("double", length(df))
+  for(i in seq_along(df)){
+    out[i]<- fun(df[[i]])
+  }
+  out
+}
+```
+
+```{r adapted col_summary()}
+col_summary<- function(df, fun){
+  out<- vector("double", length(df))
+  for(i in seq_along(df)){
+    if(is.numeric(df[[i]])){
+      out[i]<- fun(df[[i]])
+    }else {
+      out[i]<- NA
+    }
+  }
+  out
+}
+
+# check the function on iris dataset
+col_summary(iris, mean)
+```
